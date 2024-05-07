@@ -8,7 +8,7 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 
 # Upload an image and set some options for demo purposes
 st.header("Cropper Demo")
-img_file = st.sidebar.file_uploader(label='Upload a file', type=['pdf'])
+img_file = st.sidebar.file_uploader(label='Upload a file', type=['PNG','jpeg'])
 realtime_update = st.sidebar.checkbox(label="Update in Real Time", value=True)
 box_color = st.sidebar.color_picker(label="Box Color", value='#0000FF')
 stroke_width = st.sidebar.number_input(label="Box Thickness", value=3, step=1)
@@ -31,7 +31,7 @@ return_type_dict = {
 return_type = return_type_dict[return_type_choice]
 
 if img_file:
-    img = PyPDF2.open(img_file)
+    img = IMAGE.open(img_file)
     if not realtime_update:
         st.write("Double click to save crop")
     if return_type == 'box':
