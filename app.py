@@ -40,7 +40,7 @@ if img_file:
             box_color=box_color,
             aspect_ratio=aspect_ratio,
             return_type=return_type,
-            stroke_width=stroke_width
+            #stroke_width=stroke_width
         )
         raw_image = np.asarray(img).astype('uint8')
         left, top, width, height = tuple(map(int, rect.values()))
@@ -56,7 +56,7 @@ if img_file:
             box_color=box_color,
             aspect_ratio=aspect_ratio,
             return_type=return_type,
-            stroke_width=stroke_width
+            #stroke_width=stroke_width
         )
 
         # Manipulate cropped image at will
