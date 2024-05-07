@@ -31,7 +31,7 @@ return_type_dict = {
 return_type = return_type_dict[return_type_choice]
 
 if img_file:
-    img = IMAGE.open(img_file)
+    img = Image.open(img_file)
     if not realtime_update:
         st.write("Double click to save crop")
     if return_type == 'box':
