@@ -1,43 +1,33 @@
-import streamlit as st
-import pdfplumber
+ import streamlit as st
+import fitz  # PyMuPDF
 from PIL import Image
 
 def extract_images_from_pdf(pdf_file):
     images = []
-    with pdfplumber.open(pdf_file) as pdf:
-        for page in pdf.pages:
-            for img in page.images:
-                try:
-                    img_data = pdf.extract_image(img['xref'])
-                    if img_data['image']:
-                        pil_image = Image.open(img_data['image'])
-                        images.append(pil_image)
-                except Exception as e:
-                    st.warning(f"Error extracting image: {e}")
-    return images
+    pdf_document = fitz.open(pdf_file)
 
-def crop_images(images, crop_box):
-    cropped_images = []
-    for img in images:
-        try:
-            cropped_img = img.crop(crop_box)
-            cropped_images.append(cropped_img)
-        except Exception as e:
-            st.warning(f"Error cropping image: {e}")
-    return cropped_images
+    for page_idx in range(len(pdf_document)):
+        page = pdf_document[page_idx]
+        image_list = page.get_images(full=True)
+        
+        for image_index, img in enumerate(image_list):
+            xref = img[0]
+            base_image = pdf_document.extract_image(xref)
+            image_bytes = base_image["image"]
+            image = Image.open(io.BytesIO(image_bytes))
+            images.append(image)
+
+    pdf_document.close()
+    return images
 
 def main():
     st.title("PDF Image Cropper")
 
     # Upload PDF file
     pdf_file = st.file_uploader("Upload a PDF file", type="pdf")
-    
+
     if pdf_file:
         st.write("PDF file uploaded!")
-
-        # Define crop box
-        crop_box = st.sidebar.text_input("Crop Box (left, upper, right, lower)", value="100, 100, 400, 400")
-        crop_box = tuple(map(int, crop_box.split(',')))
 
         # Extract images from PDF
         images = extract_images_from_pdf(pdf_file)
@@ -45,13 +35,11 @@ def main():
         if images:
             st.write(f"Number of images found in PDF: {len(images)}")
 
-            # Crop images
-            cropped_images = crop_images(images, crop_box)
-
-            # Display cropped images
-            st.write("Cropped Images:")
-            for i, cropped_img in enumerate(cropped_images):
-                st.image(cropped_img, caption=f"Cropped Image {i+1}")
+            # Display each image with cropper
+            for i, image in enumerate(images):
+                st.write(f"Image {i + 1}")
+                cropped_image = st.cropper(image, realtime_update=True, aspect_ratio=(1, 1))
+                st.image(cropped_image, caption=f"Cropped Image {i + 1}")
 
         else:
             st.warning("No images found in the PDF.")
