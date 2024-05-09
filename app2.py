@@ -1,13 +1,19 @@
-import streamlit as st
+from streamlit import session_state as ss
+from streamlit_pdf_viewer import pdf_viewer
 
-def main():
-    st.title("PDF Viewer")
 
-    uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
+# Declare variable.
+if 'pdf_ref' not in ss:
+    ss.pdf_ref = None
 
-    if uploaded_file is not None:
-        st.markdown("## Displaying PDF content")
-        st.pdf_viewer(uploaded_file)
 
-if __name__ == "__main__":
-    main()
+# Access the uploaded ref via a key.
+st.file_uploader("Upload PDF file", type=('pdf'), key='pdf')
+
+if ss.pdf:
+    ss.pdf_ref = ss.pdf  # backup
+
+# Now you can access "pdf_ref" anywhere in your app.
+if ss.pdf_ref:
+    binary_data = ss.pdf_ref.getvalue()
+    pdf_viewer(input=binary_data, width=700)
