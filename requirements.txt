@@ -5,3 +5,4 @@ streamlit_cropper
 PyPDF2
 streamlit_pdf_viewer
 pdf2image
+pdfplumber
