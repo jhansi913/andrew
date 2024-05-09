@@ -1,19 +1,27 @@
-from streamlit import session_state as ss
-from streamlit_pdf_viewer import pdf_viewer
-import streamlit as st
+ import streamlit as st
+import pdf2image
+import zipfile
+import os
+from io import BytesIO
 
-# Declare variable.
-if 'pdf_ref' not in ss:
-    ss.pdf_ref = None
+# https://discuss.streamlit.io/t/how-to-download-image/3358/10
 
 
-# Access the uploaded ref via a key.
-st.file_uploader("Upload PDF file", type=('pdf'), key='pdf')
-
-if ss.pdf:
-    ss.pdf_ref = ss.pdf  # backup
-
-# Now you can access "pdf_ref" anywhere in your app.
-if ss.pdf_ref:
-    binary_data = ss.pdf_ref.getvalue()
-    pdf_viewer(input=binary_data, width=700)
+pdf_uploaded = st.file_uploader("Select a file", type="pdf")
+button = st.button("Confirm")
+image_down = []
+st.write("test1")
+if button and pdf_uploaded is not None:
+    st.write("test2")
+    if pdf_uploaded.type == "application/pdf":
+        st.write("test3")
+        images = pdf2image.convert_from_bytes(pdf_uploaded.read())
+        for i, page in enumerate(images):
+            st.write(i)
+            st.write(page)
+            st.image(page, use_column_width=True)
+            img = page
+            buf = BytesIO()
+            img.save(buf, format="JPEG")
+            byte_im = buf.getvalue()
+            st.download_button("Download", data=byte_im, file_name=f"Image_{i}.png")
