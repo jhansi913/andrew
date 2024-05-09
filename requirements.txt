@@ -6,4 +6,4 @@ PyPDF2
 streamlit_pdf_viewer
 pdf2image
 pdfplumber
-session_state
+
