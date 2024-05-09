@@ -1,4 +1,4 @@
- import streamlit as st
+import streamlit as st
 import fitz  # PyMuPDF
 
 def crop_pdf(input_pdf_path, output_pdf_path, x1, y1, x2, y2):
