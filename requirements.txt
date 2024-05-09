@@ -3,5 +3,4 @@ Pillow~=9.2.0
 streamlit==1.15.2
 streamlit_cropper
 PyPDF2
-pdfplumber
-fitz
+streamlit_pdf_viewer
