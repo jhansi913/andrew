@@ -4,3 +4,4 @@ streamlit==1.31.0
 streamlit_cropper
 PyPDF2
 streamlit_pdf_viewer
+pdf2image
