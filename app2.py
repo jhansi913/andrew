@@ -1,19 +1,15 @@
-from streamlit import session_state as ss
-from streamlit_pdf_viewer import pdf_viewer
+ import base64
+
+import streamlit as st
 
 
-# Declare variable.
-if 'pdf_ref' not in ss:
-    ss.pdf_ref = None
+uploaded = st.file_uploader(label="Please browse for a pdf file", type="pdf")
+if uploaded is None:
+    st.stop()
 
-
-# Access the uploaded ref via a key.
-st.file_uploader("Upload PDF file", type=('pdf'), key='pdf')
-
-if ss.pdf:
-    ss.pdf_ref = ss.pdf  # backup
-
-# Now you can access "pdf_ref" anywhere in your app.
-if ss.pdf_ref:
-    binary_data = ss.pdf_ref.getvalue()
-    pdf_viewer(input=binary_data, width=700)
+base64_pdf = base64.b64encode(uploaded.read()).decode("utf-8")
+pdf_display = (
+    f'<embed src="data:application/pdf;base64,{base64_pdf}" '
+    'width="800" height="1000" type="application/pdf"></embed>'
+)
+st.markdown(pdf_display, unsafe_allow_html=True)
