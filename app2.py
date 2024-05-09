@@ -1,4 +1,4 @@
-import streamlit as st
+ import streamlit as st
 import pdfplumber
 from PIL import Image
 import io
@@ -27,10 +27,15 @@ def main():
             st.markdown("---")
 
             for i, img in enumerate(images):
-                image_data = io.BytesIO(img["stream"].getvalue())
-                pil_image = Image.open(image_data)
-
-                st.image(pil_image, caption=f"Page {img['page_number']}, Image {i + 1}")
+                if img["stream"]:
+                    image_data = img["stream"].getvalue()
+                    try:
+                        pil_image = Image.open(io.BytesIO(image_data))
+                        st.image(pil_image, caption=f"Page {img['page_number']}, Image {i + 1}")
+                    except Exception as e:
+                        st.warning(f"Error displaying image {i + 1}: {e}")
+                else:
+                    st.warning(f"No image data found for image {i + 1}")
 
         else:
             st.write("No images found in the PDF.")
