@@ -15,18 +15,9 @@ def extract_images_from_pdf(pdf_file):
 
 def main():
     st.title("PDF Image Extractor")
-    if 'pdf_ref' not in ss:
-        ss.pdf_ref = None
-             
-
-    st.file_uploader("Upload a PDF file", type="pdf")
-    if ss.pdf:
-        
-        ss.pdf_ref = ss.pdf
-    if ss.pdf_ref:
-        binary_data = ss.pdf_ref.getvalue()
-        pdf_viewer(input=binary_data, width=700)
-       
+    
+    uploaded_file=st.file_uploader("Upload a PDF file", type="pdf")
+     
 
     if uploaded_file is not None:
         st.markdown("## Images detected in PDF")
