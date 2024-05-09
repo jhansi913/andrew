@@ -19,7 +19,7 @@ def main():
         ss.pdf_ref = None
              
 
-    uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
+    st.file_uploader("Upload a PDF file", type="pdf")
     if ss.pdf:
         
         ss.pdf_ref = ss.pdf
