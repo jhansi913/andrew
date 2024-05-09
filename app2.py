@@ -21,6 +21,7 @@ def main():
 
     uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
     if ss.pdf:
+        
         ss.pdf_ref = ss.pdf
     if ss.pdf_ref:
         binary_data = ss.pdf_ref.getvalue()
