@@ -1,27 +1,39 @@
-import streamlit as st
-import pdf2image
-import zipfile
-import os
-from io import BytesIO
+ import streamlit as st
+import pdfplumber
+from PIL import Image
+import io
 
-# https://discuss.streamlit.io/t/how-to-download-image/3358/10
+def extract_images_from_pdf(pdf_file):
+    images = []
+    with pdfplumber.open(pdf_file) as pdf:
+        for page in pdf.pages:
+            for img in page.images:
+                images.append(img)
+    return images
 
+def main():
+    st.title("PDF Image Extractor")
 
-pdf_uploaded = st.file_uploader("Select a file", type="pdf")
-button = st.button("Confirm")
-image_down = []
-st.write("test1")
-if button and pdf_uploaded is not None:
-    st.write("test2")
-    if pdf_uploaded.type == "application/pdf":
-        st.write("test3")
-        images = pdf2image.convert_from_bytes(pdf_uploaded.read())
-        for i, page in enumerate(images):
-            st.write(i)
-            st.write(page)
-            st.image(page, use_column_width=True)
-            img = page
-            buf = BytesIO()
-            img.save(buf, format="JPEG")
-            byte_im = buf.getvalue()
-            st.download_button("Download", data=byte_im, file_name=f"Image_{i}.png")
+    uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
+
+    if uploaded_file is not None:
+        st.markdown("## Images detected in PDF")
+
+        # Extract images from the PDF
+        images = extract_images_from_pdf(uploaded_file)
+
+        if images:
+            st.write(f"Number of images detected: {len(images)}")
+            st.markdown("---")
+
+            for i, img in enumerate(images):
+                image_data = io.BytesIO(img["stream"].getvalue())
+                pil_image = Image.open(image_data)
+
+                st.image(pil_image, caption=f"Page {img['page_number']}, Image {i + 1}")
+
+        else:
+            st.write("No images found in the PDF.")
+
+if __name__ == "__main__":
+    main()
