@@ -50,7 +50,3 @@ if img_file:
 ## References
 
 - [streamlit-drawable-canvas](https://github.com/andfanilo/streamlit-drawable-canvas)
-
-## Acknowledgments
-
-Big thanks to zoncrd and yanirs for their contributions
