@@ -2,6 +2,7 @@ numpy==1.23.5
 Pillow~=9.2.0
 streamlit==1.15.2
 streamlit_cropper
+PyPDF2
 PyPDF
 streamlit_pdf_viewer
 pdf2image
